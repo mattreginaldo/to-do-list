@@ -7,16 +7,20 @@ export const GeneralProvider = (props) => {
     themeMode: "",
   });
 
+  const [tasks, setTasks] = useState();
+
   useEffect(() => {
     const themeStorage = localStorage.getItem("themeMode");
-    const tasksStorage = localStorage.getItem("tasks");
+    const tasksStorage = JSON.parse(localStorage.getItem("tasks"));
 
     setGeneralContext({
       themeMode: themeStorage ? themeStorage : "light",
     });
+
+    setTasks(tasksStorage ? tasksStorage : []);
   }, []);
 
-  return <GeneralContext.Provider value={{ generalContext, setGeneralContext }}>{props.children}</GeneralContext.Provider>;
+  return <GeneralContext.Provider value={{ generalContext, setGeneralContext, tasks, setTasks }}>{props.children}</GeneralContext.Provider>;
 };
 
 export const useGeneralContext = () => React.useContext(GeneralContext);

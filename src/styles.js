@@ -12,7 +12,8 @@ export const TasksBox = styled.div`
   ${({ theme }) => css`
     background-color: ${theme.box};
     width: 60vw;
-    height: 100%;
+    height: 300px;
+    overflow: auto;
     padding: 30px;
     border-radius: 10px;
     box-shadow: -3px 14px 15px rgb(0 0 0 / 15%);
@@ -65,6 +66,48 @@ export const Li = styled.li`
     :nth-child(odd) {
       background-color: ${unset || theme.odd};
     }
+    img {
+      cursor: pointer;
+    }
+  `}
+`;
+
+export const RemoveTask = styled.button`
+  ${() => css`
+    background-color: transparent;
+    border: none;
+  `}
+`;
+
+export const Fields = styled.div`
+  ${() => css`
+    display: flex;
+    align-items: center;
+    width: 100%;
+  `}
+`;
+
+export const Input = styled.input`
+  ${({ theme }) => css`
+    background-color: transparent;
+    color: ${theme.text};
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    height: 30px;
+    width: -webkit-fill-available;
+    border-radius: 10px;
+  `}
+`;
+
+export const Checkbox = styled.input`
+  ${() => css`
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
   `}
 `;
 
@@ -114,7 +157,7 @@ export const Counter = styled.span`
     background-color: #efefef;
     transition: 0.15s ease-in;
 
-    background-color: ${(active ? "#582a9b" : "#fff")};
-    color: ${(active ? "#fff" : "#582a9b")};
+    background-color: ${active ? "#582a9b" : "#fff"};
+    color: ${active ? "#fff" : "#582a9b"};
   `}
 `;

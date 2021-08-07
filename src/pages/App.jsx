@@ -7,8 +7,22 @@ import { lightTheme, darkTheme } from "../styles/theme";
 
 import * as S from "../styles";
 
+import { filterTasksByTab } from "../utils";
+import ListMovable from "../components/listMovable";
+
 function App() {
+  function getRandomInt() {
+    return Math.floor(Math.random() * (50000 - 0)) + 0;
+  }
+
+  const newTask = {
+    id: getRandomInt(),
+    description: "",
+    status: 2,
+    completed: false,
+  };
   const { generalContext, setGeneralContext } = useGeneralContext();
+  const { tasks, setTasks } = useGeneralContext();
 
   const [tabs, setTabs] = useState([
     {
@@ -27,27 +41,8 @@ function App() {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [tasks, setTasks] = useState([
-    {
-      description: "Testando 1",
-      status: 2,
-      completed: false,
-    },
-    {
-      description: "Testando 2",
-      status: 2,
-      completed: false,
-    },
-  ]);
-
   const addTask = () => {
-    const newTask = {
-      description: "Testando 123123",
-      status: 1,
-      completed: false,
-    };
-    setTasks((tasks) => [...tasks, newTask]);
-    console.log(tasks);
+    setTasks([...tasks, newTask]);
   };
 
   const handleTheme = (mode) => {
@@ -86,7 +81,7 @@ function App() {
             }}
             active={activeTab === index}>
             {tab.label}
-            <S.Counter active={activeTab === index}>{filterTasks(index).length}</S.Counter>
+            <S.Counter active={activeTab === index}>{filterTasksByTab(tasks, index)?.length}</S.Counter>
           </S.Tab>
         ))}
       </S.Tabs>
@@ -97,28 +92,19 @@ function App() {
     return (
       <S.TasksBox>
         <S.Ul>
-          <Li tasks={filterTasks(activeTab)} />
+          <ListMovable activeTab={activeTab} />
         </S.Ul>
       </S.TasksBox>
     );
   };
 
-  const Li = (props) => {
-    return props.tasks.length > 0
-      ? props.tasks.map((task, index) => (
-          <S.Li key={index}>
-            {task.description}
-            <img src={"img/icons/trash.svg"} alt="" />
-          </S.Li>
-        ))
-      : "Nenhum resultado encontrado.";
-  };
-
-  const filterTasks = (index) => {
-    return tasks.filter((name) => {
-      return index > 0 ? name.status === index : name;
-    });
-  };
+  useEffect(() => {
+    if (tasks) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      setTasks(tasks);
+      console.log(tasks);
+    }
+  }, [tasks]);
 
   return (
     <ThemeProvider theme={generalContext.themeMode === "light" ? lightTheme : darkTheme}>
